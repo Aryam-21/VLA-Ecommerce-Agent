@@ -25,17 +25,7 @@ class VLMClient:
             # Connect to Mistral's OpenAI-compatible API
             self.client = OpenAI(api_key=api_key, base_url="https://api.mistral.ai/v1")
             self.model = "pixtral-12b-2409"
-            print(f"🧠 [VLM CLIENT] Initialized Mistral {self.model} (FREE tier).")
-            # Connect to Mistral's OpenAI-compatible API
-            self.client = OpenAI(api_key=api_key, base_url="https://api.mistral.ai/v1")
-            # Pixtral is Mistral's Vision-Language Model, perfect for UI coordinates
-            self.model = "pixtral-12b-2409"
-            print(f"🧠 [VLM CLIENT] Initialized Mistral {self.model} (FREE tier).")
-
-        elif self.provider == "ollama":
-            self.client = OpenAI(api_key="ollama", base_url="http://localhost:11434/v1")
-            self.model = os.getenv("OLLAMA_MODEL", "llama3.2-vision")
-            print(f"🧠 [VLM CLIENT] Initialized local Ollama ({self.model}).")
+            print(f"🧠 [VLM CLIENT] Initialized Mistral {self.model} (FREE tier).")        
 
         elif self.provider == "gemini":
             api_key = os.getenv("GEMINI_API_KEY")

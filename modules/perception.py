@@ -11,7 +11,7 @@ class VisualPerception:
     async def analyze_environment(self, page, current_phase):
         print("\n👁️ [MODULE 1: VISUAL PERCEPTION] Analyzing current screen...")
 
-        # 🆕 Skip VLM for DOM-handled phases (including verification)
+        # Skip VLM for DOM-handled phases
         if current_phase in [
             "add_socks", "add_basketball", "add_tshirt",
             "click_cart",
@@ -22,9 +22,18 @@ class VisualPerception:
                 print("   ↳ Using DOM/JavaScript to verify 3 different delivery dates...")
                 has_three = await page.evaluate("window.verifyThreeDifferentDates()")
                 return {"success": has_three, "reason": "DOM verified 3 unique dates"}
-            
+
             print(f"   ↳ Using DOM/JavaScript for {current_phase} (100% reliable)")
             return {"found": True, "x": 0, "y": 0}
+
+        # 🆕 HONEST MODE: for Place Order, scroll the button into view FIRST
+        # (like a human scrolling), so the VLM truly sees it in the screenshot.
+        if current_phase == "click_place_order":
+            await page.evaluate(
+                "const b = document.querySelector('.place-order-button');"
+                "if (b) b.scrollIntoView({ block: 'center' });"
+            )
+            await asyncio.sleep(0.5)
 
         # Neutral mouse position
         await page.mouse.move(640, 750)

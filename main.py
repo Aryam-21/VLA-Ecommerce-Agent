@@ -108,6 +108,10 @@ async def main():
                 # 3. ACT
                 next_phase = await action.execute_action(page, vlm_data, current_phase)
 
+                # 🆕 Safety: no progress counts as an attempt
+                if next_phase == current_phase:
+                    state.increment_attempts()
+
                 # 2. UPDATE STATE
                 state.update_phase(next_phase)
                 await asyncio.sleep(2)
