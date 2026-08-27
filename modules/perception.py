@@ -14,7 +14,6 @@ class VisualPerception:
         # Skip VLM for DOM-handled phases
         if current_phase in [
             "add_socks", "add_basketball", "add_tshirt",
-            "click_cart",
             "delivery_tshirt", "delivery_basketball", "delivery_socks",
             "verify_delivery"
         ]:

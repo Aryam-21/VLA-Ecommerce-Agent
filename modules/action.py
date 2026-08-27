@@ -41,21 +41,24 @@ class ActionGeneration:
         # ==========================================
         elif current_phase == "click_cart":
             print("   ↳ 🛒 Attempting Cart Link click...")
-            
-            # Tier 1: Injected JS
-            await page.evaluate("window.clickCartLink()")
-            await asyncio.sleep(1.5)
+
+            # 🆕 Tier 1: VLM coordinates (Vision-first)
+            if 0 < x <= 1280 and 0 < y <= 800:
+                print(f"   ↳ 🎯 VLM trying Cart Link at X={x}, Y={y}")
+                await page.mouse.move(x, y, steps=15)
+                await page.mouse.click(x, y)
+                await asyncio.sleep(1.5)
 
             # Tier 2: Motor Recovery (Playwright native click)
             if "checkout" not in page.url:
-                print("   ↳ 🔄 JS missed. Engaging Motor Recovery (Playwright native click)...")
+                print("   ↳ 🔄 VLM missed. Engaging Motor Recovery (Playwright native click)...")
                 try:
                     await page.click('.cart-link', timeout=3000)
                     await asyncio.sleep(1.5)
                 except Exception as e:
                     print(f"   ↳ ⚠️ Native click failed: {str(e)[:50]}")
 
-            # Final Check
+            # Final check
             if "checkout" in page.url:
                 print("   ↳ ✅ Successfully navigated to checkout via UI interaction!")
                 await page.evaluate("window.scrollTo(0, 0)")
